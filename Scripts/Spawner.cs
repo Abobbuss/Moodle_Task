@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
-using UnityEngine.UIElements;
+
 
 public class Spawner : MonoBehaviour
 {
@@ -21,7 +18,7 @@ public class Spawner : MonoBehaviour
     {
         _rotateY = GetRotateToEnemy();
 
-        GameObject newEnemyObject = Instantiate(_enemyPrefab, transform.position, Quaternion.Euler(0f, _rotateY, 0f));
+        Enemy newEnemy = Instantiate(_enemyPrefab, transform.position, Quaternion.Euler(0f, _rotateY, 0f)).GetComponent<Enemy>();
     }
 
     private float GetRotateToEnemy()
@@ -29,4 +26,3 @@ public class Spawner : MonoBehaviour
         return Random.Range(0, 180f);
     }
 }
-
