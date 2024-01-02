@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 
 public class Spawner : MonoBehaviour
@@ -7,22 +9,25 @@ public class Spawner : MonoBehaviour
     [SerializeField] private float _repetRate = 2.0f;
     [SerializeField] private GameObject _enemyPrefab;
 
-    private float _rotateY;
+    private List<Transform> _playerTargets = new List<Transform>();
 
     private void Start()
     {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+        foreach (GameObject player in players)
+        {
+            _playerTargets.Add(player.transform);
+        }
+
         InvokeRepeating(nameof(CreateEnemy), _delay, _repetRate);
     }
 
     private void CreateEnemy()
     {
-        _rotateY = GetRotateToEnemy();
+        Transform randomPlayer = _playerTargets[Random.Range(0, _playerTargets.Count)];
 
-        Enemy newEnemy = Instantiate(_enemyPrefab, transform.position, Quaternion.Euler(0f, _rotateY, 0f)).GetComponent<Enemy>();
-    }
-
-    private float GetRotateToEnemy()
-    {
-        return Random.Range(0, 180f);
+        Enemy newEnemy = Instantiate(_enemyPrefab, transform.position, Quaternion.identity).GetComponent<Enemy>();
+        newEnemy.SetTarget(randomPlayer);
     }
 }
