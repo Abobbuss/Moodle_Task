@@ -16,8 +16,8 @@ public class Enemy : MonoBehaviour
             transform.Translate(_speed * Time.deltaTime * direction);
         }
 
-        if (Vector3.Distance(transform.position, _target.position) < 0.25f)
-            Destroy();
+/*        if (Vector3.Distance(transform.position, _target.position) < 0.25f)
+            Destroy();*/
     }
 
     public void SetTarget(Transform target)
