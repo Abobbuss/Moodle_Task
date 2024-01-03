@@ -11,13 +11,10 @@ public class Enemy : MonoBehaviour
     private void Update()
     {
         if (_target != null)
-        {
-            Vector3 direction = (_target.position - transform.position).normalized;
-            transform.Translate(_speed * Time.deltaTime * direction);
-        }
+            transform.position = Vector3.MoveTowards(transform.position, _target.position, _speed * Time.deltaTime);
 
-/*        if (Vector3.Distance(transform.position, _target.position) < 0.25f)
-            Destroy();*/
+        if (Vector3.Distance(transform.position, _target.position) < 0.25f)
+            Destroy();
     }
 
     public void SetTarget(Transform target)
