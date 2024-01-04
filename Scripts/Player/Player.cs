@@ -2,35 +2,21 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private Transform _target1;
-    [SerializeField] private Transform _target2;
-    [SerializeField] private float _speed = 5f;
+    [SerializeField] private float _moveSpeed;
 
-    private Transform _currentTarget;
-
-    private void Start()
-    {
-        _currentTarget = _target1;
-    }
+    private string _verticalInput = "Vertical";
 
     private void Update()
     {
-        MoveToTarget(_currentTarget);
+        float verticalMove = Input.GetAxis(_verticalInput);
 
-        if (Vector3.Distance(transform.position, _currentTarget.position) < 0.25f)
-            SwitchTarget();
+        Move(verticalMove);
     }
 
-    private void MoveToTarget(Transform target)
+    private void Move(float verticalInput)
     {
-        transform.position = Vector3.MoveTowards(transform.position, target.position, _speed * Time.deltaTime);
-    }
+        Vector3 movement = new Vector3(0f, 0f, verticalInput);
 
-    private void SwitchTarget()
-    {
-        if (_currentTarget == _target1)
-            _currentTarget = _target2;
-        else
-            _currentTarget = _target1;
+        transform.Translate(movement * _moveSpeed * Time.deltaTime);
     }
 }
