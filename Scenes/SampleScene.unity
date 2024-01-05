@@ -233,6 +233,7 @@ GameObject:
   - component: {fileID: 287827286}
   - component: {fileID: 287827285}
   - component: {fileID: 287827289}
+  - component: {fileID: 287827290}
   m_Layer: 0
   m_Name: House
   m_TagString: Untagged
@@ -339,6 +340,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &287827290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 287827284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ee83a221cae4b748add9415136e12e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &360965400
 GameObject:
   m_ObjectHideFlags: 0
@@ -804,7 +817,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _audioSource: {fileID: 866038095}
-  _fadeSpeed: 0.1
+  _fadeSpeed: 0.3
+  _house: {fileID: 287827290}
 --- !u!65 &866038092
 BoxCollider:
   m_ObjectHideFlags: 0
