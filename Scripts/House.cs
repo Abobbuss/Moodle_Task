@@ -6,17 +6,20 @@ using UnityEngine;
 public class House : MonoBehaviour
 {
     public event Action<bool> PlayerInsideChanged;
-    private const string _playerTag = "Player";
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag(_playerTag))
+        Player player = other.GetComponent<Player>();
+
+        if (player != null)
             PlayerInsideChanged?.Invoke(true);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag(_playerTag))
+        Player player = other.GetComponent<Player>();
+
+        if (player != null)
             PlayerInsideChanged?.Invoke(false);
     }
 }

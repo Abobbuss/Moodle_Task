@@ -7,9 +7,13 @@ public class Signaling : MonoBehaviour
     [SerializeField] private float _fadeSpeed = 0.2f;
     [SerializeField] private House _house;
 
+    private Coroutine _currentCoroutine;
+
     private IEnumerator ChangeVolumeOverTime(bool isPlayerInside)
     {
-        float targetVolume = isPlayerInside ? 1.0f : 0.0f;
+        float maxValue = 1.0f;
+        float minValue = 0.0f;
+        float targetVolume = isPlayerInside ? maxValue : minValue;
 
         while (!Mathf.Approximately(_audioSource.volume, targetVolume))
         {
@@ -19,6 +23,8 @@ public class Signaling : MonoBehaviour
 
         if (_audioSource.volume == 0.0f)
             StopAudio();
+
+        _currentCoroutine = null;
     }
 
     private void OnEnable()
@@ -33,10 +39,15 @@ public class Signaling : MonoBehaviour
 
     private void HandlePlayerInsideChanged(bool isPlayerInside)
     {
+        if (_currentCoroutine != null)
+        {
+            StopCoroutine(_currentCoroutine);
+        }
+
         if (isPlayerInside)
             StartAudio();
 
-        StartCoroutine(ChangeVolumeOverTime(isPlayerInside));
+        _currentCoroutine = StartCoroutine(ChangeVolumeOverTime(isPlayerInside));
     }
 
     public void StartAudio()
