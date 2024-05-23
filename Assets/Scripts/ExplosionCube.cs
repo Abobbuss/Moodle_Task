@@ -5,6 +5,8 @@ using UnityEngine;
 public class ExplosionCube : MonoBehaviour, IClickable
 {
     [SerializeField] private float _currentChanceSeparation = 100f;
+    [SerializeField] private int _explosionForce = 20;
+    [SerializeField] private int _explosionRadius = 5;
 
     private Renderer _renderer;
     private int _minCountChildren = 2;
@@ -23,17 +25,15 @@ public class ExplosionCube : MonoBehaviour, IClickable
     private void CreateChildren()
     {
         int countChildren = Random.Range(_minCountChildren, _maxCountChildren);
-        float explosionForce = 1000;
-        float explosionRadius = 20;
 
         for (int i = 0; i < countChildren; i++)
         {
             ExplosionCube childCube = Instantiate(this, transform.position, Quaternion.identity);
             childCube.transform.localScale = transform.localScale / 2f;
+
             childCube.ChangeChanceSeparation(_currentChanceSeparation / 2f);
             childCube.ChangeColor();
-
-            GetComponent<Rigidbody>().AddExplosionForce(explosionForce, transform.position, explosionRadius);
+            childCube.ExplosionForce();
         }
     }
 
@@ -44,9 +44,9 @@ public class ExplosionCube : MonoBehaviour, IClickable
         if (_renderer != null)
         {
             _renderer.material.color = new Color(
-                Random.value, // Случайное значение для красного канала
-                Random.value, // Случайное значение для зеленого канала
-                Random.value  // Случайное значение для синего канала
+                Random.value,
+                Random.value,
+                Random.value
             );
         }
         else
@@ -54,4 +54,6 @@ public class ExplosionCube : MonoBehaviour, IClickable
             Debug.LogError("Renderer is not initialized. Cannot change color.");
         }
     }
+
+    private void ExplosionForce() => GetComponent<Rigidbody>().AddExplosionForce(_explosionForce, transform.position, _explosionRadius);
 }

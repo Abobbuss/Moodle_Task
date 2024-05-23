@@ -127,5 +127,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cdf76fccf0c0104fa41d1f2b4a9ecfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _childrenPrefab: {fileID: 6010908367960806809}
   _currentChanceSeparation: 100
+  _explosionForce: 200
+  _explosionRadius: 10
