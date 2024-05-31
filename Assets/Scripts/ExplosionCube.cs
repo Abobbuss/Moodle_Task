@@ -1,45 +1,35 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
 [RequireComponent (typeof(Renderer))]
+[RequireComponent(typeof(CubeSpawner))]
 public class ExplosionCube : MonoBehaviour, IClickable
 {
     [SerializeField] private float _currentChanceSeparation = 100f;
-    [SerializeField] private int _explosionForce = 20;
-    [SerializeField] private int _explosionRadius = 5;
-
+    
+    private CubeSpawner _cubeSpawner;
     private Renderer _renderer;
-    private int _minCountChildren = 2;
-    private int _maxCountChildren = 6;
 
     private void OnEnable() => _renderer = GetComponent<Renderer>();
 
+    private void Awake()
+    {
+        _cubeSpawner = GetComponent<CubeSpawner>();
+
+        if (_cubeSpawner == null)
+            Debug.LogError("CubeSpawner отсутсвует");
+    }
+
     public void OnClick()
     {
-        if(Random.Range(0, 100) <= _currentChanceSeparation)
-            CreateChildren();
+        if (Random.Range(0, 100) <= _currentChanceSeparation)
+            _cubeSpawner.CreateChildren(this, _currentChanceSeparation);
 
         Destroy(gameObject);
     }
 
-    private void CreateChildren()
-    {
-        int countChildren = Random.Range(_minCountChildren, _maxCountChildren);
+    public void ChangeChanceSeparation(float chanceSeparation) => _currentChanceSeparation = chanceSeparation;
 
-        for (int i = 0; i < countChildren; i++)
-        {
-            ExplosionCube childCube = Instantiate(this, transform.position, Quaternion.identity);
-            childCube.transform.localScale = transform.localScale / 2f;
-
-            childCube.ChangeChanceSeparation(_currentChanceSeparation / 2f);
-            childCube.ChangeColor();
-            childCube.ExplosionForce();
-        }
-    }
-
-    private void ChangeChanceSeparation(float chanceSeparation) => _currentChanceSeparation = chanceSeparation;
-
-    private void ChangeColor()
+    public void ChangeColor()
     {
         if (_renderer != null)
         {
@@ -51,9 +41,7 @@ public class ExplosionCube : MonoBehaviour, IClickable
         }
         else
         {
-            Debug.LogError("Renderer is not initialized. Cannot change color.");
+            Debug.LogError("Renderer отсутсвует");
         }
     }
-
-    private void ExplosionForce() => GetComponent<Rigidbody>().AddExplosionForce(_explosionForce, transform.position, _explosionRadius);
 }
