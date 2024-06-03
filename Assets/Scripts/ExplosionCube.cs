@@ -1,47 +1,31 @@
 using UnityEngine;
 
-[RequireComponent (typeof(Renderer))]
-[RequireComponent(typeof(CubeSpawner))]
-public class ExplosionCube : MonoBehaviour, IClickable
+[RequireComponent(typeof(Rigidbody))]
+public class ExplosionCube : MonoBehaviour
 {
-    [SerializeField] private float _currentChanceSeparation = 100f;
-    
-    private CubeSpawner _cubeSpawner;
-    private Renderer _renderer;
+    [SerializeField] private float _baseExplosionForce = 10f;
+    [SerializeField] private float _baseExplosionRadius = 1f;
 
-    private void OnEnable() => _renderer = GetComponent<Renderer>();
-
-    private void Awake()
+    public void Explosion()
     {
-        _cubeSpawner = GetComponent<CubeSpawner>();
+        var (explosionForce, explosionRadius) = CountExplosionCharacteristics(transform);
 
-        if (_cubeSpawner == null)
-            Debug.LogError("CubeSpawner отсутсвует");
+        Vector3 explosionPosition = transform.position;
+        Collider[] explosionObjects = Physics.OverlapSphere(explosionPosition, explosionRadius);
+
+        foreach (Collider obj in explosionObjects)
+        {
+            if (obj.TryGetComponent(out Rigidbody rb))
+                rb.AddExplosionForce(explosionForce, explosionPosition, explosionRadius);
+        }
     }
 
-    public void OnClick()
+    private (float force, float radius) CountExplosionCharacteristics(Transform transform)
     {
-        if (Random.Range(0, 100) <= _currentChanceSeparation)
-            _cubeSpawner.CreateChildren(this, _currentChanceSeparation);
+        float size = transform.localScale.magnitude;
+        float force = _baseExplosionForce / size;
+        float radius = _baseExplosionRadius / size;
 
-        Destroy(gameObject);
-    }
-
-    public void ChangeChanceSeparation(float chanceSeparation) => _currentChanceSeparation = chanceSeparation;
-
-    public void ChangeColor()
-    {
-        if (_renderer != null)
-        {
-            _renderer.material.color = new Color(
-                Random.value,
-                Random.value,
-                Random.value
-            );
-        }
-        else
-        {
-            Debug.LogError("Renderer отсутсвует");
-        }
+        return (force, radius);
     }
 }

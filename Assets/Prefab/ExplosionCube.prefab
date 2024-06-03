@@ -130,7 +130,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentChanceSeparation: 100
-  _cubeSpawner: {fileID: 2039744806054880384}
 --- !u!114 &2039744806054880384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,5 +158,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e45ebfa128e40745b55c72700af921c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _explosionForce: 20
-  _explosionRadius: 5
+  _baseExplosionForce: 250
+  _baseExplosionRadius: 30
+  _upwardsModifier: 1
