@@ -9,14 +9,13 @@ public class CubeSpawner : MonoBehaviour
 
     public void CreateChildren(CubeSeparator parentCube, float parentChanceSeparation)
     {
-        int countChildren = Random.Range(_minCountChildren, _maxCountChildren);
+        int countChildren = Random.Range(_minCountChildren, _maxCountChildren + 1);
 
         for (int i = 0; i < countChildren; i++)
         {
             CubeSeparator childCube = Instantiate(parentCube, parentCube.transform.position, Quaternion.identity);
             childCube.transform.localScale = parentCube.transform.localScale / _dividerLocalScaleChildrenCube;
-            childCube.ChangeChanceSeparation(parentChanceSeparation / _dividerChanceSeparationChildrenCube);
-            childCube.ChangeColor();
+            childCube.Init(parentChanceSeparation / _dividerChanceSeparationChildrenCube);
         }
     }
 }

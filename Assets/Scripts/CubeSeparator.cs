@@ -10,6 +10,9 @@ public class CubeSeparator : MonoBehaviour, IClickable
     private CubeSpawner _cubeSpawner;
     private Renderer _renderer;
     private ExplosionCube _explosionCube;
+    private float _maxChanceSeparation = 100f;
+    private float _minChanceSeparation = 0f;
+
 
     private void Awake()
     {
@@ -20,17 +23,23 @@ public class CubeSeparator : MonoBehaviour, IClickable
 
     public void OnClick()
     {
-        if (Random.Range(0, 100) <= _currentChanceSeparation)
+        if (Random.Range(_minChanceSeparation, _maxChanceSeparation + 1) <= _currentChanceSeparation)
             _cubeSpawner.CreateChildren(this, _currentChanceSeparation);
         else
-            _explosionCube.Explosion();
+            _explosionCube.GenerateExplosion();
 
         Destroy(gameObject);
     }
 
-    public void ChangeChanceSeparation(float chanceSeparation) => _currentChanceSeparation = chanceSeparation;
+    public void Init(float chanceSeparation)
+    {
+        ChangeChanceSeparation(chanceSeparation);
+        ChangeColor();
+    }
 
-    public void ChangeColor()
+    private void ChangeChanceSeparation(float chanceSeparation) => _currentChanceSeparation = chanceSeparation;
+
+    private void ChangeColor()
     {
         if (_renderer != null)
         {

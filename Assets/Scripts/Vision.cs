@@ -4,11 +4,11 @@ public class Vision : MonoBehaviour
 {
     [SerializeField] private Camera _ñamera;
 
-    private int _leftMouseButtonIndex = 0;
+    private int _primaryActionButtonIndex = 0;
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(_leftMouseButtonIndex))
+        if (Input.GetMouseButtonDown(_primaryActionButtonIndex))
         {
             RaycastHit hit;
             Ray ray = _ñamera.ScreenPointToRay(Input.mousePosition);

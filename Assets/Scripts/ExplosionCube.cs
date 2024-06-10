@@ -6,7 +6,7 @@ public class ExplosionCube : MonoBehaviour
     [SerializeField] private float _baseExplosionForce = 10f;
     [SerializeField] private float _baseExplosionRadius = 1f;
 
-    public void Explosion()
+    public void GenerateExplosion()
     {
         var (explosionForce, explosionRadius) = CountExplosionCharacteristics(transform);
 
@@ -15,8 +15,8 @@ public class ExplosionCube : MonoBehaviour
 
         foreach (Collider obj in explosionObjects)
         {
-            if (obj.TryGetComponent(out Rigidbody rb))
-                rb.AddExplosionForce(explosionForce, explosionPosition, explosionRadius);
+            if (obj.TryGetComponent(out Rigidbody rigidbody))
+                rigidbody.AddExplosionForce(explosionForce, explosionPosition, explosionRadius);
         }
     }
 
