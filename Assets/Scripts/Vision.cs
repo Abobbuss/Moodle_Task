@@ -15,9 +15,7 @@ public class Vision : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit))
             {
-                IClickable clickable = hit.collider.gameObject.GetComponent<IClickable>();
-
-                if (clickable != null)
+                if (hit.collider.TryGetComponent(out IClickable clickable))
                     clickable.OnClick();
             }
         }

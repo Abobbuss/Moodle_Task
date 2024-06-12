@@ -13,7 +13,6 @@ public class CubeSeparator : MonoBehaviour, IClickable
     private float _maxChanceSeparation = 100f;
     private float _minChanceSeparation = 0f;
 
-
     private void Awake()
     {
         _cubeSpawner = GetComponent<CubeSpawner>();

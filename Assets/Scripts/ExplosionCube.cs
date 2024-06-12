@@ -6,9 +6,17 @@ public class ExplosionCube : MonoBehaviour
     [SerializeField] private float _baseExplosionForce = 10f;
     [SerializeField] private float _baseExplosionRadius = 1f;
 
+    private float _localSize;
+
+    private void Start()
+    {
+        _localSize = transform.localScale.magnitude;
+    }
+
     public void GenerateExplosion()
     {
-        var (explosionForce, explosionRadius) = CountExplosionCharacteristics(transform);
+        float explosionForce = CountExplosionForce();
+        float explosionRadius = CountExplosionRadius();
 
         Vector3 explosionPosition = transform.position;
         Collider[] explosionObjects = Physics.OverlapSphere(explosionPosition, explosionRadius);
@@ -20,12 +28,7 @@ public class ExplosionCube : MonoBehaviour
         }
     }
 
-    private (float force, float radius) CountExplosionCharacteristics(Transform transform)
-    {
-        float size = transform.localScale.magnitude;
-        float force = _baseExplosionForce / size;
-        float radius = _baseExplosionRadius / size;
+    private float CountExplosionRadius() => _baseExplosionRadius / _localSize;
 
-        return (force, radius);
-    }
+    private float CountExplosionForce() => _baseExplosionForce / _localSize;
 }
