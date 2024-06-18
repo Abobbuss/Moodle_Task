@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent (typeof(Renderer))]
 [RequireComponent(typeof(CubeSpawner))]
 [RequireComponent(typeof(ExplosionCube))]
-public class CubeSeparator : MonoBehaviour, IClickable
+public class CubeSeparator : MonoBehaviour
 {
     [SerializeField] private float _currentChanceSeparation = 100f;
     
@@ -22,12 +22,7 @@ public class CubeSeparator : MonoBehaviour, IClickable
 
     public void OnClick()
     {
-        if (Random.Range(_minChanceSeparation, _maxChanceSeparation + 1) <= _currentChanceSeparation)
-            _cubeSpawner.CreateChildren(this, _currentChanceSeparation);
-        else
-            _explosionCube.GenerateExplosion();
-
-        Destroy(gameObject);
+        
     }
 
     public void Init(float chanceSeparation)
