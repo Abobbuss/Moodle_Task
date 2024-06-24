@@ -4,25 +4,21 @@ using UnityEngine.Pool;
 [RequireComponent(typeof(BoxCollider))]
 public class CubeSpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject _cube;
+    [SerializeField] private Cube _cube;
     [SerializeField] private float _timeCreate;
 
     private Collider _zoneCollider;
-    private ObjectPool<GameObject> _pool;
+    private ObjectPool<Cube> _pool;
 
     private void Awake()
     {
         _zoneCollider = GetComponent<BoxCollider>();
 
-        _pool = new ObjectPool<GameObject>(
+        _pool = new ObjectPool<Cube>(
                            createFunc: () => Create(),
-                           actionOnGet: (obj) => {
-                               obj.SetActive(true);
-                               obj.transform.position = GetCreatingPosition();
-                               obj.GetComponent<CubeController>().Initialize(_pool); 
-                           },
-                           actionOnRelease: (obj) => obj.SetActive(false),
-                           actionOnDestroy: (obj) => Destroy(obj)
+                           actionOnGet: (obj) => obj.OnGet(_pool, GetCreatingPosition()),
+                           actionOnRelease: (obj) => obj.OnRelease(),
+                           actionOnDestroy: (obj) => Destroy(obj.gameObject)
                        );
     }
 
@@ -36,7 +32,7 @@ public class CubeSpawner : MonoBehaviour
         _pool.Get();
     }
 
-    private GameObject Create() 
+    private Cube Create() 
     {
         Vector3 position = GetCreatingPosition();
 
