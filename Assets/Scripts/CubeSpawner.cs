@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -15,8 +16,8 @@ public class CubeSpawner : MonoBehaviour
         _zoneCollider = GetComponent<BoxCollider>();
 
         _pool = new ObjectPool<Cube>(
-                           createFunc: () => Create(),
-                           actionOnGet: (obj) => obj.OnGet(_pool, GetCreatingPosition()),
+                           createFunc: Create,
+                           actionOnGet: (obj) => OnGet(_pool, GetCreatingPosition(), obj),
                            actionOnRelease: (obj) => obj.OnRelease(),
                            actionOnDestroy: (obj) => Destroy(obj.gameObject)
                        );
@@ -24,7 +25,22 @@ public class CubeSpawner : MonoBehaviour
 
     private void Start()
     {
+        StartCoroutine(StartPool());
         InvokeRepeating(nameof(GetCube), 0.0f, _timeCreate);
+    }
+
+    private IEnumerator StartPool()
+    {
+        yield return new WaitForSeconds(_timeCreate);
+
+        GetCube();
+    }
+
+    private void OnGet(ObjectPool<Cube> pool, Vector3 position, Cube cube)
+    {
+        gameObject.transform.position = position;
+        gameObject.SetActive(true);
+        cube.Initialize(pool);
     }
 
     private void GetCube()

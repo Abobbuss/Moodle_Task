@@ -19,9 +19,10 @@ public class Cube : MonoBehaviour
         _renderer = GetComponent<Renderer>();
     }
 
-    public void OnPlatformCollision()
+    public void HandlePlatformCollision()
     {
-        if (_hasCollided) return;
+        if (_hasCollided) 
+            return;
 
         _hasCollided = true;
         ChangeColor();
@@ -32,6 +33,12 @@ public class Cube : MonoBehaviour
     {
         _pool = pool;
         _hasCollided = false;
+    }
+
+    public void OnRelease()
+    {
+        gameObject.SetActive(false);
+        _renderer.material.color = _defaultColor;
     }
 
     private void ChangeColor()
@@ -48,19 +55,6 @@ public class Cube : MonoBehaviour
         {
             Debug.LogError("Renderer отсутсвует");
         }
-    }
-
-    public void OnGet(ObjectPool<Cube> pool, Vector3 position)
-    {
-        gameObject.transform.position = position;
-        gameObject.SetActive(true);
-        Initialize(pool);
-    }
-
-    public void OnRelease()
-    {
-        gameObject.SetActive(false);
-        _renderer.material.color = _defaultColor;
     }
 
     private IEnumerator DestroyAfterRandomTime()

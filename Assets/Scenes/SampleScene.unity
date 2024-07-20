@@ -774,7 +774,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cube: {fileID: 4836141465147730309, guid: 25742eb1e2d35254791c31f324baa497, type: 3}
-  _timeCreate: 1
+  _timeCreate: 2
 --- !u!65 &1965722276
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -786,8 +786,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.86559635, y: 1, z: 0.74275315}
+  m_Center: {x: 0.0025531386, y: 0, z: -0.033375204}
 --- !u!23 &1965722277
 MeshRenderer:
   m_ObjectHideFlags: 0
