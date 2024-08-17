@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Pool;
 
 [RequireComponent(typeof(Renderer))]
@@ -13,6 +14,8 @@ public class Cube : MonoBehaviour
     private float _minLifeTime = 2f;
     private float _maxLifeTime = 5f;
     private bool _hasCollided = false;
+
+    public static UnityAction<Vector3> Destroing;
 
     private void Awake()
     {
@@ -60,9 +63,11 @@ public class Cube : MonoBehaviour
     private IEnumerator DestroyAfterRandomTime()
     {
         float randomTime = Random.Range(_minLifeTime, _maxLifeTime);
-
         yield return new WaitForSeconds(randomTime);
 
-        _pool.Release(this);
+        Destroing?.Invoke(transform.position);
+
+        _pool.Release(this); 
     }
 }
+    

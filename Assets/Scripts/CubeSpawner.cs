@@ -10,6 +10,7 @@ public class CubeSpawner : MonoBehaviour
 
     private Collider _zoneCollider;
     private ObjectPool<Cube> _pool;
+    private int _totalCubesSpawned = 0;
 
     private void Awake()
     {
@@ -28,6 +29,13 @@ public class CubeSpawner : MonoBehaviour
         StartCoroutine(StartPool());
         InvokeRepeating(nameof(GetCube), 0.0f, _timeCreate);
     }
+
+    public int GetTotalCubesSpawned()
+        => _totalCubesSpawned;
+    public int GetCreatedCount()
+        => _pool.CountAll;
+    public int GetActiveCount()
+        => _pool.CountActive;
 
     private IEnumerator StartPool()
     {
@@ -51,6 +59,7 @@ public class CubeSpawner : MonoBehaviour
     private Cube Create() 
     {
         Vector3 position = GetCreatingPosition();
+        _totalCubesSpawned++;
 
         return Instantiate(_cube, position, Quaternion.identity);
     }
