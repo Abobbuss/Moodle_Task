@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class SpawnerStatsDisplay : MonoBehaviour
 {
@@ -15,11 +14,11 @@ public class SpawnerStatsDisplay : MonoBehaviour
 
     private void Update()
     {
-        _cubesSpawnedText.text = " количество заспавненых кубов: " + _cubeSpawner.GetCreatedCount();
+        _cubesSpawnedText.text = " количество созданых кубов: " + _cubeSpawner.GetCreatedCount();
         _cubesActiveText.text = "количество активных кубов: " + _cubeSpawner.GetActiveCount();
-        _cubesTotalText.text = "тотал кубов: " + _cubeSpawner.GetTotalCubesSpawned();
-        _bombsSpawnedText.text = " количество заспавненых бомб: " + _cubeSpawner.GetCreatedCount();
-        _bombsActiveText.text = "количество активных бомб: " + _cubeSpawner.GetActiveCount();
-        _bombsTotalText.text = "тотал бомб: " + _cubeSpawner.GetTotalCubesSpawned();
+        _cubesTotalText.text = "количество заспавненых кубов: " + _cubeSpawner.GetTotalSpawned();
+        _bombsSpawnedText.text = " количество созданных бомб: " + _bombSpawner.GetCreatedCount();
+        _bombsActiveText.text = "количество активных бомб: " + _bombSpawner.GetActiveCount();
+        _bombsTotalText.text = "количество заспавненых бомб: " + _bombSpawner.GetTotalSpawned();
     }
 }

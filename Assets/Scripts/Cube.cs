@@ -15,7 +15,7 @@ public class Cube : MonoBehaviour
     private float _maxLifeTime = 5f;
     private bool _hasCollided = false;
 
-    public static UnityAction<Vector3> Destroing;
+    public event UnityAction<Vector3> Destroed;
 
     private void Awake()
     {
@@ -65,8 +65,7 @@ public class Cube : MonoBehaviour
         float randomTime = Random.Range(_minLifeTime, _maxLifeTime);
         yield return new WaitForSeconds(randomTime);
 
-        Destroing?.Invoke(transform.position);
-
+        Destroed?.Invoke(transform.position);
         _pool.Release(this); 
     }
 }

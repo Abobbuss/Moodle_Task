@@ -1,54 +1,37 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Pool;
 
 [RequireComponent(typeof(BoxCollider))]
-public class CubeSpawner : MonoBehaviour
+public class CubeSpawner : BaseSpawner<Cube>
 {
-    [SerializeField] private Cube _cube;
     [SerializeField] private float _timeCreate;
-
+    [SerializeField] private BombSpawner _bombSpawner;
     private Collider _zoneCollider;
-    private ObjectPool<Cube> _pool;
-    private int _totalCubesSpawned = 0;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         _zoneCollider = GetComponent<BoxCollider>();
-
-        _pool = new ObjectPool<Cube>(
-                           createFunc: Create,
-                           actionOnGet: (obj) => OnGet(_pool, GetCreatingPosition(), obj),
-                           actionOnRelease: (obj) => obj.OnRelease(),
-                           actionOnDestroy: (obj) => Destroy(obj.gameObject)
-                       );
     }
 
     private void Start()
     {
         StartCoroutine(StartPool());
-        InvokeRepeating(nameof(GetCube), 0.0f, _timeCreate);
     }
 
-    public int GetTotalCubesSpawned()
-        => _totalCubesSpawned;
-    public int GetCreatedCount()
-        => _pool.CountAll;
-    public int GetActiveCount()
-        => _pool.CountActive;
+    protected override void OnRelease(Cube cube)
+    {
+        _bombSpawner.UnSubscribeToDestroyCube(cube);
+    }
 
     private IEnumerator StartPool()
     {
-        yield return new WaitForSeconds(_timeCreate);
+        while (true)
+        {
+            yield return new WaitForSeconds(_timeCreate);
 
-        GetCube();
-    }
-
-    private void OnGet(ObjectPool<Cube> pool, Vector3 position, Cube cube)
-    {
-        gameObject.transform.position = position;
-        gameObject.SetActive(true);
-        cube.Initialize(pool);
+            GetCube();
+        }
     }
 
     private void GetCube()
@@ -56,12 +39,12 @@ public class CubeSpawner : MonoBehaviour
         _pool.Get();
     }
 
-    private Cube Create() 
+    protected override void OnGet(Cube cube)
     {
-        Vector3 position = GetCreatingPosition();
-        _totalCubesSpawned++;
-
-        return Instantiate(_cube, position, Quaternion.identity);
+        _bombSpawner.SubscribeToDestroyCube(cube);
+        cube.transform.position = GetCreatingPosition();
+        cube.gameObject.SetActive(true);
+        cube.Initialize(_pool);
     }
 
     private Vector3 GetCreatingPosition()

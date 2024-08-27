@@ -1,57 +1,23 @@
 using UnityEngine;
-using UnityEngine.Pool;
 
-[RequireComponent(typeof(BoxCollider))]
-public class BombSpawner : MonoBehaviour
+public class BombSpawner : BaseSpawner<Bomb>
 {
-    [SerializeField] private Bomb _bomb;
+    public void SubscribeToDestroyCube(Cube cube)
+        => cube.Destroed += SpawnBomb;
 
-    private ObjectPool<Bomb> _pool;
-    private int _totalBombSpawned = 0;
-
-    private void Awake()
-    {
-        _pool = new ObjectPool<Bomb>(
-                           createFunc: Create,
-                           actionOnGet: (obj) => OnGet(obj),
-                           actionOnRelease: (obj) => obj.OnRelease(),
-                           actionOnDestroy: (obj) => Destroy(obj.gameObject)
-                       );
-    }
-
-    private void OnEnable()
-    {
-        Cube.Destroing += SpawnBomb;
-    }
-
-    private void OnDisable()
-    {
-        Cube.Destroing -= SpawnBomb;
-    }
-
-    public int GetTotalCubesSpawned() 
-        => _totalBombSpawned;
-    public int GetCreatedCount() 
-        => _pool.CountAll;
-    public int GetActiveCount() 
-        => _pool.CountActive;
+    public void UnSubscribeToDestroyCube(Cube cube)
+        => cube.Destroed -= SpawnBomb;
 
     private void SpawnBomb(Vector3 position)
     {
         Bomb bomb = _pool.Get();
         bomb.transform.position = position;
-        bomb.gameObject.SetActive(true);
     }
 
-    private Bomb Create()
-    {
-        _totalBombSpawned++;
-
-        return Instantiate(_bomb);
-    }
-
-    private void OnGet(Bomb bomb)
+    protected override void OnGet(Bomb bomb)
     {
         bomb.Initialize(_pool);
+        bomb.gameObject.SetActive(true);
+        bomb.StartFadeCoroutine();
     }
 }

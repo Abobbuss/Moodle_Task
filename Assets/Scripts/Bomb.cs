@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Pool;
 
+[RequireComponent(typeof(Color))]
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Renderer))]
 public class Bomb : MonoBehaviour
@@ -12,17 +13,25 @@ public class Bomb : MonoBehaviour
     private Renderer _renderer;
     private ObjectPool<Bomb> _pool;
     private Material _material;
+    private Color _startColor = Color.black;
+    private Color _endColor;
 
     private void Awake()
     {
         _renderer = GetComponent<Renderer>();
         _material = _renderer.material;
+        _endColor = new Color(_startColor.r, _startColor.g, _startColor.b, 0f);
     }
 
     public void Initialize(ObjectPool<Bomb> pool)
     {
         _pool = pool;
+    }
+
+    public void StartFadeCoroutine()
+    {
         StartCoroutine(FadeAndExplode());
+        _material.color = _startColor;
     }
 
     private IEnumerator FadeAndExplode()
@@ -31,24 +40,23 @@ public class Bomb : MonoBehaviour
         float minFadeDuration = 5f;
         float elapsedTime = 0f;
         _fadeDuration = Random.Range(maxFadeDuration, minFadeDuration);
-        Color startColor = _material.color;
-        Color endColor = new Color(startColor.r, startColor.g, startColor.b, 0f);
 
         while (elapsedTime < _fadeDuration)
         {
-            _material.color = Color.Lerp(startColor, endColor, elapsedTime / _fadeDuration);
+            _material.color = Color.Lerp(_startColor, _endColor, elapsedTime / _fadeDuration);
             elapsedTime += Time.deltaTime;
 
             yield return null;
         }
 
-        _material.color = endColor;
+        _material.color = _endColor;
         Explode();
         _pool.Release(this);
     }
 
     private void Explode()
     {
+        float force = 500f;
         Collider[] colliders = Physics.OverlapSphere(transform.position, _explosionRadius);
 
         foreach (var collider in colliders)
@@ -56,13 +64,7 @@ public class Bomb : MonoBehaviour
             Rigidbody rigidbody = collider.GetComponent<Rigidbody>();
 
             if (rigidbody != null)
-                rigidbody.AddExplosionForce(500f, transform.position, _explosionRadius);
+                rigidbody.AddExplosionForce(force, transform.position, _explosionRadius);
         }
-    }
-
-    public void OnRelease()
-    {
-        gameObject.SetActive(false);
-        _material.color = new Color(0f, 0f, 0f, 1f);
     }
 }
