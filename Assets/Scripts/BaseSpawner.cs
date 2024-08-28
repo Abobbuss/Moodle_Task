@@ -1,16 +1,19 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Pool;
 
 public abstract class BaseSpawner<T> : MonoBehaviour where T : MonoBehaviour
 {
-    [SerializeField] protected T _prefab;
+    [SerializeField] protected T Prefab;
 
-    protected ObjectPool<T> _pool;
-    protected int _totalSpawned = 0;
+    protected ObjectPool<T> Pool;
+    protected int TotalSpawned = 0;
+
+    public event UnityAction ChangedCount;
 
     protected virtual void Awake()
     {
-        _pool = new ObjectPool<T>(
+        Pool = new ObjectPool<T>(
             createFunc: Create,
             actionOnGet: OnGet,
             actionOnRelease: obj => obj.gameObject.SetActive(false),
@@ -18,22 +21,26 @@ public abstract class BaseSpawner<T> : MonoBehaviour where T : MonoBehaviour
         );
     }
 
-    public int GetTotalSpawned() 
-        => _totalSpawned;
+    public int GetTotalSpawned()
+        => TotalSpawned;
 
     public int GetCreatedCount() 
-        => _pool.CountAll;
+        => Pool.CountAll;
 
     public int GetActiveCount() 
-        => _pool.CountActive;
+        => Pool.CountActive;
 
     protected abstract void OnGet(T obj);
-    protected virtual void OnRelease(T item) { }
-
-    protected virtual T Create()
+    protected virtual void OnRelease(T item) 
     {
-        _totalSpawned++;
+        ChangedCount?.Invoke();
+    }
 
-        return Instantiate(_prefab);
+    private T Create()
+    {
+        TotalSpawned++;
+        ChangedCount?.Invoke();
+
+        return Instantiate(Prefab);
     }
 }

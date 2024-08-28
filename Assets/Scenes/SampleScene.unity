@@ -706,7 +706,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 675060993}
-  - component: {fileID: 675060994}
   m_Layer: 5
   m_Name: UI
   m_TagString: Untagged
@@ -740,26 +739,6 @@ RectTransform:
   m_AnchoredPosition: {x: -407.49997, y: 188}
   m_SizeDelta: {x: 815, y: 632.5}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &675060994
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 675060992}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aeb4ae635102dca4eb409f36d2ff23e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _cubesSpawnedText: {fileID: 1154758077}
-  _cubesActiveText: {fileID: 412487943}
-  _cubesTotalText: {fileID: 330216024}
-  _bombsSpawnedText: {fileID: 1826626711}
-  _bombsActiveText: {fileID: 1276248455}
-  _bombsTotalText: {fileID: 1042719398}
-  _cubeSpawner: {fileID: 1965722275}
-  _bombSpawner: {fileID: 772958228}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -994,7 +973,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a84d403cbe8c6124fb4ccf7208ae494f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 6307685979751699525, guid: 0643f9ceafefff84abcd9ceaee96ce97, type: 3}
+  Prefab: {fileID: 6307685979751699525, guid: 0643f9ceafefff84abcd9ceaee96ce97, type: 3}
 --- !u!65 &772958229
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1806,7 +1785,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e85eb46c45dab5f48996e99331ed9844, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 4836141465147730309, guid: 25742eb1e2d35254791c31f324baa497, type: 3}
+  Prefab: {fileID: 4836141465147730309, guid: 25742eb1e2d35254791c31f324baa497, type: 3}
   _timeCreate: 0.5
   _bombSpawner: {fileID: 772958228}
 --- !u!65 &1965722276

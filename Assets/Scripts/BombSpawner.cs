@@ -8,16 +8,22 @@ public class BombSpawner : BaseSpawner<Bomb>
     public void UnSubscribeToDestroyCube(Cube cube)
         => cube.Destroed -= SpawnBomb;
 
-    private void SpawnBomb(Vector3 position)
+    private void SpawnBomb(Cube cube)
     {
-        Bomb bomb = _pool.Get();
-        bomb.transform.position = position;
+        Bomb bomb = Pool.Get();
+        bomb.transform.position = cube.transform.position;
     }
 
     protected override void OnGet(Bomb bomb)
     {
-        bomb.Initialize(_pool);
+        bomb.Destroed += OnRelease;
         bomb.gameObject.SetActive(true);
         bomb.StartFadeCoroutine();
+    }
+
+    protected override void OnRelease(Bomb bomb)
+    {
+        Pool.Release(bomb);
+        bomb.Destroed -= OnRelease;
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Pool;
 
 [RequireComponent(typeof(Color))]
@@ -11,21 +12,17 @@ public class Bomb : MonoBehaviour
     
     private float _fadeDuration;
     private Renderer _renderer;
-    private ObjectPool<Bomb> _pool;
     private Material _material;
     private Color _startColor = Color.black;
     private Color _endColor;
+
+    public event UnityAction<Bomb> Destroed;
 
     private void Awake()
     {
         _renderer = GetComponent<Renderer>();
         _material = _renderer.material;
         _endColor = new Color(_startColor.r, _startColor.g, _startColor.b, 0f);
-    }
-
-    public void Initialize(ObjectPool<Bomb> pool)
-    {
-        _pool = pool;
     }
 
     public void StartFadeCoroutine()
@@ -51,7 +48,7 @@ public class Bomb : MonoBehaviour
 
         _material.color = _endColor;
         Explode();
-        _pool.Release(this);
+        Destroed?.Invoke(this);
     }
 
     private void Explode()

@@ -353,6 +353,7 @@
 "Assets/Scripts/Cube.cs"
 "Assets/Scripts/CubeSpawner.cs"
 "Assets/Scripts/Platform.cs"
+"Assets/Scripts/SpawnerStats.cs"
 "Assets/Scripts/SpawnerStatsDisplay.cs"
 "Assets/TextMesh Pro/Examples & Extras/Scripts/Benchmark01.cs"
 "Assets/TextMesh Pro/Examples & Extras/Scripts/Benchmark01_UGUI.cs"

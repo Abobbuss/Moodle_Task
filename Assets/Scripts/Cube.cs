@@ -9,13 +9,11 @@ public class Cube : MonoBehaviour
     [SerializeField] private Color _defaultColor;
 
     private Renderer _renderer;
-    private ObjectPool<Cube> _pool;
-
     private float _minLifeTime = 2f;
     private float _maxLifeTime = 5f;
     private bool _hasCollided = false;
 
-    public event UnityAction<Vector3> Destroed;
+    public event UnityAction<Cube> Destroed;
 
     private void Awake()
     {
@@ -32,16 +30,9 @@ public class Cube : MonoBehaviour
         StartCoroutine(DestroyAfterRandomTime());
     }
 
-    public void Initialize(ObjectPool<Cube> pool)
+    public void Initialize()
     {
-        _pool = pool;
         _hasCollided = false;
-    }
-
-    public void OnRelease()
-    {
-        gameObject.SetActive(false);
-        _renderer.material.color = _defaultColor;
     }
 
     private void ChangeColor()
@@ -54,10 +45,6 @@ public class Cube : MonoBehaviour
                 Random.value
             );
         }
-        else
-        {
-            Debug.LogError("Renderer отсутсвует");
-        }
     }
 
     private IEnumerator DestroyAfterRandomTime()
@@ -65,8 +52,7 @@ public class Cube : MonoBehaviour
         float randomTime = Random.Range(_minLifeTime, _maxLifeTime);
         yield return new WaitForSeconds(randomTime);
 
-        Destroed?.Invoke(transform.position);
-        _pool.Release(this); 
+        Destroed?.Invoke(this);
     }
 }
     

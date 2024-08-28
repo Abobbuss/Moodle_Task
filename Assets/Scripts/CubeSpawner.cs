@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Pool;
 
 [RequireComponent(typeof(BoxCollider))]
 public class CubeSpawner : BaseSpawner<Cube>
@@ -21,14 +22,28 @@ public class CubeSpawner : BaseSpawner<Cube>
 
     protected override void OnRelease(Cube cube)
     {
+        Pool.Release(cube);
         _bombSpawner.UnSubscribeToDestroyCube(cube);
+        UnSubscribeToCubeSpawn(cube);
+    }
+
+    private void SubscribeToCubeSpawn(Cube cube)
+    {
+        cube.Destroed += OnRelease;
+    }
+
+    private void UnSubscribeToCubeSpawn(Cube cube)
+    {
+        cube.Destroed -= OnRelease;
     }
 
     private IEnumerator StartPool()
     {
+        var waitTime = new WaitForSeconds(_timeCreate);
+
         while (true)
         {
-            yield return new WaitForSeconds(_timeCreate);
+            yield return waitTime;
 
             GetCube();
         }
@@ -36,15 +51,16 @@ public class CubeSpawner : BaseSpawner<Cube>
 
     private void GetCube()
     {
-        _pool.Get();
+        Pool.Get();
     }
 
     protected override void OnGet(Cube cube)
     {
         _bombSpawner.SubscribeToDestroyCube(cube);
+        SubscribeToCubeSpawn(cube);
         cube.transform.position = GetCreatingPosition();
         cube.gameObject.SetActive(true);
-        cube.Initialize(_pool);
+        cube.Initialize();
     }
 
     private Vector3 GetCreatingPosition()
