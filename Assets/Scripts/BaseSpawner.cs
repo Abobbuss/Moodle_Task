@@ -31,7 +31,7 @@ public abstract class BaseSpawner<T> : MonoBehaviour where T : MonoBehaviour
         => Pool.CountActive;
 
     protected abstract void OnGet(T obj);
-    protected virtual void OnRelease(T item) 
+    protected virtual void Release(T item) 
     {
         ChangedCount?.Invoke();
     }

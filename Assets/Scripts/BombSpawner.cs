@@ -16,14 +16,14 @@ public class BombSpawner : BaseSpawner<Bomb>
 
     protected override void OnGet(Bomb bomb)
     {
-        bomb.Destroed += OnRelease;
+        bomb.Destroed += Release;
         bomb.gameObject.SetActive(true);
         bomb.StartFadeCoroutine();
     }
 
-    protected override void OnRelease(Bomb bomb)
+    protected override void Release(Bomb bomb)
     {
         Pool.Release(bomb);
-        bomb.Destroed -= OnRelease;
+        bomb.Destroed -= Release;
     }
 }

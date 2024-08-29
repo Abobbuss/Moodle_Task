@@ -20,7 +20,7 @@ public class CubeSpawner : BaseSpawner<Cube>
         StartCoroutine(StartPool());
     }
 
-    protected override void OnRelease(Cube cube)
+    protected override void Release(Cube cube)
     {
         Pool.Release(cube);
         _bombSpawner.UnSubscribeToDestroyCube(cube);
@@ -29,12 +29,12 @@ public class CubeSpawner : BaseSpawner<Cube>
 
     private void SubscribeToCubeSpawn(Cube cube)
     {
-        cube.Destroed += OnRelease;
+        cube.Destroed += Release;
     }
 
     private void UnSubscribeToCubeSpawn(Cube cube)
     {
-        cube.Destroed -= OnRelease;
+        cube.Destroed -= Release;
     }
 
     private IEnumerator StartPool()

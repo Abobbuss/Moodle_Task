@@ -20,14 +20,17 @@ public class Cube : MonoBehaviour
         _renderer = GetComponent<Renderer>();
     }
 
-    public void HandlePlatformCollision()
+    private void OnCollisionEnter(Collision collision)
     {
-        if (_hasCollided) 
+        if (_hasCollided)
             return;
 
-        _hasCollided = true;
-        ChangeColor();
-        StartCoroutine(DestroyAfterRandomTime());
+        if (collision.gameObject.TryGetComponent<Platform>(out var _))
+        {
+            _hasCollided = true;
+            ChangeColor();
+            StartCoroutine(DestroyAfterRandomTime());
+        }
     }
 
     public void Initialize()
